@@ -1,0 +1,7 @@
+.LoginForm label, .LoginForm input[type="submit"] {
+    display: block;
+    margin: 10px;
+}
+.LoginForm input {
+    padding: 3px;
+}

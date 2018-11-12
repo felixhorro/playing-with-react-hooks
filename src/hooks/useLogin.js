@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function({ user, password } = {}) {
   const [loggedUser, setUser] = useState({});
 
-  /*
+  /*** Near real world loggin function: ***
   const checkLogin = ({ user, password }) => {
     const promise = fetch("/login", {
       method: "POST",
@@ -23,25 +23,20 @@ export default function({ user, password } = {}) {
     return promise;
   };
   */
-  const checkLogin = ({ user, password }) => {
-    const promise = () => new Promise(resolve => resolve({
-      name: `${user} logged`,
-      rol: "administrador"
-    }));
+
+  /*** Fake login ***/
+  const checkLogin = ({ username, password }) => {
+    const promise = new Promise(resolve =>
+      setTimeout(() =>
+        resolve({
+          name: username,
+          rol: "administrador"
+        })
+      , 2000)
+    );
     promise.then(({ name, rol }) => setUser({ name, rol }));
     return promise;
   };
-
-  /*
-  useEffect(() => {
-    setTimeout(() =>
-      setUser({
-        name: "Félix",
-        rol: "administrador"
-      }), 2000);
-    }, [user, password]
-  );
-  */
 
   console.log("Login...");
   return [loggedUser, checkLogin];

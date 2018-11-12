@@ -1,0 +1,7 @@
+.Profile p {
+    padding: 2em;
+}
+.Profile button {
+    margin: 1em;
+    min-width: 5em;
+}
