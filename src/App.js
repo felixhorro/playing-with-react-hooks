@@ -1,28 +1,36 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React,{ useState } from 'react';
+import useLogin from './hooks/useLogin';
 import './App.css';
 
-class App extends Component {
-  render() {
+function App(props) {
+  const [color, changeColor] = useState('black');
+  const [user, checkLogin] = useLogin();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  if (user.log) {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
+          <h1>{user.name || 'No user'}</h1>
+          <h1>{user.rol || '--'}</h1>
+          <p style={{ backgroundColor: color }}>
             Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+        </p>
+          <button onClick={() => changeColor('darkblue')}>blue</button>
+          <button onClick={() => changeColor('darkred')}>red</button>
+          <button onClick={() => changeColor('darkgreen')}>green</button>
         </header>
       </div>
     );
+  } else {
+    return (
+      <form onSubmit={() => checkLogin({ username, password })}>
+        <label>User: <input value={username} onChange={event => setUsername(event.target.value)}/></label>
+        <label>Pwd: <input value={password} onChange={event => setPassword(event.target.value)}/></label>
+      </form>
+    );
   }
-}
+};
 
 export default App;
