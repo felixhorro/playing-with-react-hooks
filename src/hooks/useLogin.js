@@ -1,43 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function({ user, password } = {}) {
+export default function({ username, password } = {}) {
   const [loggedUser, setUser] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  /*** Near real world loggin function: ***
-  const checkLogin = ({ user, password }) => {
-    const promise = fetch("/login", {
+  useEffect(async () => {
+    if (!username) {
+      setError(null);
+      setUser({});
+      return;
+    }
+
+    setLoading(true);
+    const loginResponse = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-type": "application/json"
       },
-      body: JSON.stringify({
-        user,
-        password
-      })
+      body: JSON.stringify({ username, password })
     });
+    setLoading(false);
 
-    promise
-      .then(r => r.json(), () => ({}))
-      .then(({ user, rol }) => setUser({ user, rol }));
+    if (loginResponse.ok) {
+      const { name, rol } = await loginResponse.json();
+      setUser({ name, rol });
+      setError(null);
+    } else if (loginResponse.status === 401) {
+      setError('The user or password you have entered is incorrect.');
+    }
 
-    return promise;
-  };
-  */
-
-  /*** Fake login ***/
-  const checkLogin = ({ username, password }) => {
-    const promise = new Promise(resolve =>
-      setTimeout(() =>
-        resolve({
-          name: username,
-          rol: "administrador"
-        })
-      , 2000)
-    );
-    promise.then(({ name, rol }) => setUser({ name, rol }));
-    return promise;
-  };
+  }, [username, password]);
 
   console.log("Login...");
-  return [loggedUser, checkLogin];
+  return {
+    user: loggedUser,
+    error,
+    loading
+  };
 }

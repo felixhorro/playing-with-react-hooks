@@ -5,3 +5,6 @@
 .LoginForm input {
     padding: 3px;
 }
+.LoginForm .error {
+    color: red;
+}

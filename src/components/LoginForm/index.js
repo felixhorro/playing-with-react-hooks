@@ -5,29 +5,33 @@ import "./LoginForm.css";
 function LoginForm(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleSubmit = event => {
     event.preventDefault();
-    setLoading(true);
-    props.onSubmit({ username, password }).then(() => setLoading(false));
+    props.onSubmit({ username, password });
   };
 
   return (
-    <form className="LoginForm" style={{ opacity: loading ? .3 : 1 }} onSubmit={handleSubmit}>
-      <label>
-        User: <input type="text" value={username} onChange={event => setUsername(event.target.value)} />
-      </label>
-      <label>
-        Pwd: <input type="password" value={password} onChange={event => setPassword(event.target.value)} />
-      </label>
-      <input type="submit" value="Login" disabled={loading} />
+    <form className="LoginForm" style={{ opacity: props.loading ? .3 : 1 }} onSubmit={handleSubmit}>
+      {props.error &&
+        <p className="error">{props.error}</p>
+      }
+      <div>
+        <label>
+          User: <input type="text" value={username} onChange={event => setUsername(event.target.value)} />
+        </label>
+        <label>
+          Pwd: <input type="password" value={password} onChange={event => setPassword(event.target.value)} />
+        </label>
+        <input type="submit" value="Login" disabled={props.loading} />
+      </div>
     </form>
   );
 }
 
 LoginForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default LoginForm;
