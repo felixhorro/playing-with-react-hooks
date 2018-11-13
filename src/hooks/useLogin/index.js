@@ -27,6 +27,5 @@ export default function({ username, password } = {}) {
 
   }, [username, password]);
 
-  console.log("Login...");
   return state;
 }
